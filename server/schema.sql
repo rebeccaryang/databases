@@ -20,8 +20,8 @@ CREATE TABLE messages (
   username char(20),
   text varchar(255),
   room char(20),
-  primary key (id),
-  foreign key (username) references users(name)
+  primary key (id)
+  -- foreign key (username) references users(name)
   -- foreign key (room_id) references rooms(id)
 );
 

@@ -22,6 +22,14 @@ var mysql = require('mysql');
 
 // connection.end();
 
+var headers = {
+  "access-control-allow-origin": "*",
+  "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "access-control-allow-headers": "content-type, accept",
+  "access-control-max-age": 10, // Seconds.
+  'Content-Type': "application/json"
+};
+
 var connection = mysql.createConnection({
 	user: 'root',
 	database: 'chat',
@@ -45,38 +53,31 @@ var postUsrSql = function(req, res) {
 
 	connection.query("insert into users (name) values('" + username + "')",function(err,data){
 		console.log(err);
+		res.end();
 	});
-	console.log('postUsrSql running');	
 	// connection.end();
-	res.send();
 }
 
 var postMsgSql = function(req,res){
-	var username = '(SELECT name from users where name =' + JSON.stringify(req.body.username) +")";
+	var username = JSON.stringify(req.body.username);
 	// var q = connection.query('select * from users');
 	// q.on('result', function(row) {console.log(row);});
 	var text = req.body.message;
 	var roomname = req.body.roomname;
-	console.log('get to postMsgSql');
-	// console.log(text);
-	console.log(JSON.stringify(text));
-	// console.log(roomname);
-	// console.log(username);
 	connection.query("insert into messages (username, text, room) values(" + username + ", " + JSON.stringify(text) + ", " + JSON.stringify(roomname) + ");",function(err,data){
-		console.log(err);
-		console.log(data);
-		console.log('successfully inserted');
+		res.end();
 	});
 	// may need options and cb to be provided as the last 2 inputs to connection.query
-	connection.end();
-	// values ('kevin', 'said' 'roomname')
-	res.send();
+	
 }
 // mysql.query('insert into messages (username, text, room)
 // values ()
 
 var getAllSql = function(req,res){
-	mysql.query('select * from messages', [], cb);
+	connection.query('select * from messages',[], function(err,data){
+		res.writeHead(201, headers);
+		res.end(JSON.stringify({results:data}));
+	});
 	// connection.end();
 }
 

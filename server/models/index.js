@@ -14,7 +14,6 @@ module.exports = {
     // Ditto as above.
     get: function () {},
     post: function (req, res) {
-      console.log('post user in models');
       db.postUsrSql(req, res);
     }
   }
