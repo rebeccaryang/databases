@@ -24,11 +24,15 @@ var mysql = require('mysql');
 
 var connection = mysql.createConnection({
 	user: 'root',
-	database: 'chat'
+	database: 'chat',
+	password: 'kar'
+	// host: 'localhost'
 	// do we need host:localhost??
 });
 
 exports.connection = connection;
+
+connection.connect();
 
 // var something = require(index.js)
 // something.connection.connect();
@@ -36,21 +40,33 @@ exports.connection = connection;
 // Something that pulls the last 100 messages
 // db.query('select * from messages');
 // Something that adds messages
-var postSql = function(req,res){
-	var username = req.json.username;
-	var text = req.json.text;
-	var roomname = req.json.roomname;
+var postUsrSql = function(req, res) {
+	console.log(req.body.username);
+	var username = req.body.username;
 
-	db.query("insert into messages (username, text, room) values(" + username 
-		+ ", " + text + ", " + roomname + ")");
-	// may need options and cb to be provided as the last 2 inputs to db.query
+	connection.query("insert into users (name) values('" + username + "')");
+	console.log('postUsrSql running');	
+	connection.end();
 }
-// db.query('insert into messages (username, text, room)
+
+var postMsgSql = function(req,res){
+	var username = req.body.username;
+	var text = req.body.text;
+	var roomname = req.body.roomname;
+	console.log('get to postMsgSql');
+	connection.query("insert into messages (username, text, room) values(" + username 
+		+ ", " + text + ", " + roomname + ")");
+	// may need options and cb to be provided as the last 2 inputs to connection.query
+	connection.end();
+}
+// mysql.query('insert into messages (username, text, room)
 // values ()
 
 var getAllSql = function(req,res){
-	db.query('select * from messages', [], cb);
+	mysql.query('select * from messages', [], cb);
+	connection.end();
 }
 
 exports.getAllSql = getAllSql;
-exports.postSql = postSql
+exports.postMsgSql = postMsgSql;
+exports.postUsrSql = postUsrSql;
