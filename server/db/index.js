@@ -52,7 +52,7 @@ var postUsrSql = function(req, res) {
 }
 
 var postMsgSql = function(req,res){
-	var username = req.body.username;
+	var username = '(SELECT name from users where name =' + JSON.stringify(req.body.username) +")";
 	// var q = connection.query('select * from users');
 	// q.on('result', function(row) {console.log(row);});
 	var text = req.body.message;
@@ -62,14 +62,13 @@ var postMsgSql = function(req,res){
 	console.log(JSON.stringify(text));
 	// console.log(roomname);
 	// console.log(username);
-	console.log("insert into messages (username, text, room) values(" + JSON.stringify(username) + ", " + JSON.stringify(text) + ", " + JSON.stringify(roomname) + ");");
-	connection.query("insert into messages (username, text, room) values(" + JSON.stringify(username) + ", " + JSON.stringify(text) + ", " + JSON.stringify(roomname) + ");",function(err,data){
+	connection.query("insert into messages (username, text, room) values(" + username + ", " + JSON.stringify(text) + ", " + JSON.stringify(roomname) + ");",function(err,data){
 		console.log(err);
 		console.log(data);
 		console.log('successfully inserted');
 	});
 	// may need options and cb to be provided as the last 2 inputs to connection.query
-	// connection.end();
+	connection.end();
 	// values ('kevin', 'said' 'roomname')
 	res.send();
 }
