@@ -62,8 +62,12 @@ var postMsgSql = function(req,res){
 	var username = JSON.stringify(req.body.username);
 	// var q = connection.query('select * from users');
 	// q.on('result', function(row) {console.log(row);});
-	var text = req.body.message;
-	var roomname = req.body.roomname;
+	console.log('got to index.db post');
+	console.log(req.body);
+	console.log(req.body.text);
+	var text = req.body.text;
+	var roomname = req.body.roomname || 'lobby';
+	console.log(roomname);
 	connection.query("insert into messages (username, text, room) values(" + username + ", " + JSON.stringify(text) + ", " + JSON.stringify(roomname) + ");",function(err,data){
 		res.end();
 	});

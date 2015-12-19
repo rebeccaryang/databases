@@ -16,11 +16,11 @@ create table users (
 
 CREATE TABLE messages (
   /* Describe your table here.*/
-  id int(5) not null auto_increment,
+  objectId int(5) not null auto_increment,
   username char(20),
   text varchar(255),
   room char(20),
-  primary key (id)
+  primary key (objectId)
   -- foreign key (username) references users(name)
   -- foreign key (room_id) references rooms(id)
 );

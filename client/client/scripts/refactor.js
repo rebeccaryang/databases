@@ -167,6 +167,7 @@ app = {
     },
 
     displayMessage: function(message) {
+      console.log(message.objectId);
       if (!app.onscreenMessages[message.objectId]) {
         var $html = app.renderMessage(message);
         $('#chats').prepend($html);
@@ -188,7 +189,7 @@ app = {
         contentType: 'application/json',
         success: function(json) {
           // console.log(JSON.parse(json).results);
-          // console.log(json);
+          console.log(json);
           app.displayMessages(json.results);
 
         },
@@ -207,7 +208,7 @@ app = {
         contentType: 'application/json',
         success: function(json) {
           message.objectId = json.objectId;
-          app.displayMessage(message);
+          // app.displayMessage(message);
         },
         complete: function() {
           app.stopSpinner();
