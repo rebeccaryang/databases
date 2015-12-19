@@ -41,30 +41,44 @@ connection.connect();
 // db.query('select * from messages');
 // Something that adds messages
 var postUsrSql = function(req, res) {
-	console.log(req.body.username);
 	var username = req.body.username;
 
-	connection.query("insert into users (name) values('" + username + "')");
+	connection.query("insert into users (name) values('" + username + "')",function(err,data){
+		console.log(err);
+	});
 	console.log('postUsrSql running');	
-	connection.end();
+	// connection.end();
+	res.send();
 }
 
 var postMsgSql = function(req,res){
 	var username = req.body.username;
-	var text = req.body.text;
+	// var q = connection.query('select * from users');
+	// q.on('result', function(row) {console.log(row);});
+	var text = req.body.message;
 	var roomname = req.body.roomname;
 	console.log('get to postMsgSql');
-	connection.query("insert into messages (username, text, room) values(" + username 
-		+ ", " + text + ", " + roomname + ")");
+	// console.log(text);
+	console.log(JSON.stringify(text));
+	// console.log(roomname);
+	// console.log(username);
+	console.log("insert into messages (username, text, room) values(" + JSON.stringify(username) + ", " + JSON.stringify(text) + ", " + JSON.stringify(roomname) + ");");
+	connection.query("insert into messages (username, text, room) values(" + JSON.stringify(username) + ", " + JSON.stringify(text) + ", " + JSON.stringify(roomname) + ");",function(err,data){
+		console.log(err);
+		console.log(data);
+		console.log('successfully inserted');
+	});
 	// may need options and cb to be provided as the last 2 inputs to connection.query
-	connection.end();
+	// connection.end();
+	// values ('kevin', 'said' 'roomname')
+	res.send();
 }
 // mysql.query('insert into messages (username, text, room)
 // values ()
 
 var getAllSql = function(req,res){
 	mysql.query('select * from messages', [], cb);
-	connection.end();
+	// connection.end();
 }
 
 exports.getAllSql = getAllSql;
